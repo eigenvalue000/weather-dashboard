@@ -38,7 +38,7 @@ var displayWeather = function(weather, searchCity) {
     weatherContainerEl.textContent = '';
     citySearchInputEl.textContent = searchCity;
 
-    console.log(weather.coord);
+    console.log(weather.main);
 
     // Create date element by creating a span HTML element. The text of
     // this newly created element is then a string using the weather.dt.value
@@ -58,5 +58,36 @@ var displayWeather = function(weather, searchCity) {
     weatherIcon.setAttribute('src', `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`);
     citySearchInputEl.appendChild(weatherIcon);
 
+    // Create a span element to hold temperature data. The weather object has a main.temp
+    // property which is added to the text content of the temperature span element.
+    // This temperature span element is added to the class list that is defined in the HTML
+    // as list-group-item. The weather container is then appended with this temperature span
+    // element.
+    var temperatureEl = document.createElement('span');
+    temperatureEl.textContent = 'Temperature: ' + weather.main.temp + ' F';
+    temperatureEl.classList = 'list-group-item';
+    weatherContainerEl.appendChild(temperatureEl);
+
+    // Create a span element to hold humidity data. The weather object has a main.humidity
+    // property which is added to the text content of the humidity span element.
+    // This humidity span element is added to the class list that is defined in the HTML
+    // as list-group-item. The weather container is then appended with this humidity span
+    // element.
+    var humidityEl = document.createElement('span');
+    humidityEl.textContent = 'Humidity: ' + weather.main.humidity + ' %';
+    humidityEl.classList = 'list-group-item';
+    weatherContainerEl.appendChild(humidityEl);
+
+    // Create a span element to hold wind data. The weather object has a wind.speed
+    // property which is added to the text content of the wind span element.
+    // This wind span element is added to the class list that is defined in the HTML
+    // as list-group-item. The weather container is then appended with this wind span
+    // element.
+    var windSpeedEl = document.createElement('span');
+    windSpeedEl.textContent = 'Wind Speed: ' + weather.wind.speed + ' MPH';
+    windSpeedEl.classList = 'list-group-item';
+    weatherContainerEl.appendChild(windSpeedEl);
+    
 }
-console.log(getCityWeather('sacramento'))
+
+getCityWeather('sacramento')
