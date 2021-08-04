@@ -38,8 +38,6 @@ var displayWeather = function(weather, searchCity) {
     weatherContainerEl.textContent = '';
     citySearchInputEl.textContent = searchCity;
 
-    console.log(weather.main);
-
     // Create date element by creating a span HTML element. The text of
     // this newly created element is then a string using the weather.dt.value
     // property of the weather object. Moment.js is used to format the weather.dt.value
@@ -87,7 +85,27 @@ var displayWeather = function(weather, searchCity) {
     windSpeedEl.textContent = 'Wind Speed: ' + weather.wind.speed + ' MPH';
     windSpeedEl.classList = 'list-group-item';
     weatherContainerEl.appendChild(windSpeedEl);
+
+    // Get the lattitude and the longitude of the city and use these two values
+    // to get the UV index of the city.
+    var lat = weather.coord.lat;
+    var lon = weather.coord.lon;
+    getUvIndex(lat, lon);
     
 }
+
+// This function takes the lattitude and longitude of a city as inputs and
+// makes an API call to get the UV index corresponding to the inputs.
+var getUvIndex = function(lat, lon) {
+    var apiKey = '6dc9c81847f0a9c22ec27263aeb0545e';
+    var apiURL = `https://api.openweathermap.org/data/2.5/uvi?appid=${apiKey}&lat=${lat}&lon=${lon}`;
+    fetch(apiURL)
+    .then(function(response) {
+        response.json().then(function(data) {
+            console.log(data.value);
+        });
+    });
+}
+
 
 getCityWeather('sacramento')
