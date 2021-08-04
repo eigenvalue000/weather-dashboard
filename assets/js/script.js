@@ -103,9 +103,38 @@ var getUvIndex = function(lat, lon) {
     .then(function(response) {
         response.json().then(function(data) {
             console.log(data.value);
+            displayUvIndex(data);
         });
     });
 }
 
+// This function accepts the uv index value obtained from the API call in
+// the getUvIndex(lat, lon) function. The displayUvIndex() function then
+// creates a div element, then a span element, and runs some logic to 
+// determine an appropriate string to display in the span element 
+// depending on the severity of the uv index in the city coordinates.
+// Then,the uvIndexValue is appended to the div element uvIndexEl and
+// finally this div element is appended to the weather container element.
+var displayUvIndex = function(index) {
+    var uvIndexEl = document.createElement('div');
+    uvIndexEl.textContent = 'UV Index: ';
+    uvIndexEl.classList = 'list-group-item';
+
+    uvIndexValue = document.createElement('span');
+    uvIndexValue.textContent = index.value;
+
+    if (index.value <= 2) {
+        uvIndexValue.classList = 'favorable';
+    } else if (index.value > 2 && index.value <= 8) {
+        uvIndexValue.classList = 'moderate'
+    } else if (index.value > 8) {
+        uvIndexValue.classList = 'severe';
+    };
+
+    uvIndexEl.appendChild(uvIndexValue);
+
+    weatherContainerEl.appendChild(uvIndexEl);
+
+}
 
 getCityWeather('sacramento')
