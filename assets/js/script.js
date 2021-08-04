@@ -1,7 +1,8 @@
 
 var weatherContainerEl = document.querySelector('#current-weather-container');
-var citySearchInputEl = document.querySelector('#searched-city')
-
+var citySearchInputEl = document.querySelector('#searched-city');
+var forecastTitle = document.querySelector("#forecast");
+var forecastContainerEl = document.querySelector("#fiveday-container");
 
 // This function connects with the Openweathermap API using
 // an api key and an API url. It receives a response, which is
@@ -102,7 +103,6 @@ var getUvIndex = function(lat, lon) {
     fetch(apiURL)
     .then(function(response) {
         response.json().then(function(data) {
-            console.log(data.value);
             displayUvIndex(data);
         });
     });
@@ -113,7 +113,7 @@ var getUvIndex = function(lat, lon) {
 // creates a div element, then a span element, and runs some logic to 
 // determine an appropriate string to display in the span element 
 // depending on the severity of the uv index in the city coordinates.
-// Then,the uvIndexValue is appended to the div element uvIndexEl and
+// Then, the uvIndexValue is appended to the div element uvIndexEl and
 // finally this div element is appended to the weather container element.
 var displayUvIndex = function(index) {
     var uvIndexEl = document.createElement('div');
@@ -137,4 +137,70 @@ var displayUvIndex = function(index) {
 
 }
 
-getCityWeather('sacramento')
+// This function accepts a city name string as an input and makes an API call
+// to retrieve an object that contains as a list, a list of days of previous
+// weather data.
+var get5Day = function(city) {
+    var apiKey = '6dc9c81847f0a9c22ec27263aeb0545e';
+    var apiURL = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${apiKey}`;
+
+    fetch(apiURL)
+    .then(function(response) {
+        response.json().then(function(data) {
+            console.log(data);
+            display5Day(data);
+        })
+    })
+}
+
+// Get the 5 day weather forecast for 3:00 PM.
+var display5Day = function(weather) {
+    forecastContainerEl.textContent = '';
+    forecastTitle.textContent = '5 Day Forecast:';
+
+    var forecast = weather.list;
+    console.log(forecast);
+    for (let i = 5; i < forecast.length; i = i + 8) {
+        var dailyForecast = forecast[i];
+
+        var forecastEl = document.createElement('div');
+        forecastEl.classList = 'card bg-primary text-light m-2';
+        
+        // Date element
+        var forecastDate = document.createElement('h5');
+        forecastDate.textContent = moment.unix(dailyForecast.dt).format('MMM D, YYYY');
+        forecastDate.classList = 'card-header text-center';
+        forecastEl.appendChild(forecastDate);
+
+        // Image element
+        var weatherIcon = document.createElement('img');
+        weatherIcon.classList = 'card-body text-center';
+        weatherIcon.setAttribute('src', `https://openweathermap.org/img/wn/${dailyForecast.weather[0].icon}@2x.png`);
+
+        // Append the image to the forecast card
+        forecastEl.appendChild(weatherIcon);
+
+        // Create the temperature span element
+        var forecastTempEl = document.createElement('span');
+        forecastTempEl.classList = 'card-body text-center';
+        forecastTempEl.textContent = dailyForecast.main.temp + ' F';
+
+        // Append the temperature span element to the forecast card
+        forecastEl.appendChild(forecastTempEl);
+
+        // Create the humidity span element
+        var forecastHumEl = document.createElement('span');
+        forecastHumEl.classList = 'card-body text-center';
+        forecastHumEl.textContent = dailyForecast.main.humidity + ' %';
+
+        // Append the humidity span element to the forecast card
+        forecastEl.appendChild(forecastHumEl);
+
+        // Finally, append to the five day container
+        forecastContainerEl.appendChild(forecastEl);
+
+    }
+}
+
+getCityWeather('sacramento');
+get5Day('sacramento');
