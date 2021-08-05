@@ -159,9 +159,10 @@ var display5Day = function(weather) {
 
     var forecast = weather.list;
    
-    for (let i = 5; i < forecast.length; i = i + 8) {
-        var dailyForecast = forecast[i];
-
+    for (let i = 0; i < forecast.length/8; i = i + 1) {
+        var dailyForecast = forecast[i*8];
+        console.log(forecast.length)
+        console.log(forecast[i])
         var forecastEl = document.createElement('div');
         forecastEl.classList = 'card bg-primary text-light m-2';
         
