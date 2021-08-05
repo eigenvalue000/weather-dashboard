@@ -157,16 +157,11 @@ var display5Day = function(weather) {
     forecastContainerEl.textContent = '';
     forecastTitle.textContent = '5 Day Forecast:';
     
-    var currentHour = moment().hour();
-    hoursLeftFromThree = 39 - currentHour;
-    console.log(currentHour)
     var forecast = weather.list;
    
     for (let i = 5; i < forecast.length; i = i + 8) {
         var dailyForecast = forecast[i];
 
-        console.log(forecast[i])
-        console.log(i)
         var forecastEl = document.createElement('div');
         forecastEl.classList = 'card bg-primary text-light m-2';
         
