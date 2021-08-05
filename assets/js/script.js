@@ -4,6 +4,11 @@ var citySearchInputEl = document.querySelector('#searched-city');
 var forecastTitle = document.querySelector("#forecast");
 var forecastContainerEl = document.querySelector("#fiveday-container");
 
+var cities = [];
+var cityFormEl = document.querySelector('#city-search-form');
+var cityInputEl = document.querySelector('#city');
+var pastSearchButtonEl = document.querySelector('#past-search-buttons');
+
 // This function connects with the Openweathermap API using
 // an api key and an API url. It receives a response, which is
 // then converted into json.
@@ -15,15 +20,6 @@ var getCityWeather = function(city) {
     fetch(apiURL)
     .then(function(response) {
         response.json().then(function(data) {
-            // console.log(data);
-            // console.log(data.clouds);
-            // console.log(data.coord);
-            // console.log(data.main);
-            
-            // console.log(data.sys);
-            // console.log(data.weather);
-            // console.log(data.wind);
-
             displayWeather(data, data.name);
         });
     });
@@ -147,19 +143,22 @@ var get5Day = function(city) {
     fetch(apiURL)
     .then(function(response) {
         response.json().then(function(data) {
-            console.log(data);
             display5Day(data);
         })
     })
 }
 
-// Get the 5 day weather forecast for 3:00 PM.
+// This function displays the 5 day weather forecast as 5 cards by taking as 
+// an input the weather forecast data from the get5day() function
+// and uses a for loop to create 5 cards and append the various weather
+// forecast items to each card. The forecast uses the 3:00PM time for each
+// card.
 var display5Day = function(weather) {
     forecastContainerEl.textContent = '';
     forecastTitle.textContent = '5 Day Forecast:';
 
     var forecast = weather.list;
-    console.log(forecast);
+   
     for (let i = 5; i < forecast.length; i = i + 8) {
         var dailyForecast = forecast[i];
 
@@ -202,5 +201,51 @@ var display5Day = function(weather) {
     }
 }
 
-getCityWeather('sacramento');
-get5Day('sacramento');
+// This function takes as an input a previous search city and
+// prepends the pastSearch element to the pasteSearch button 
+// so that a user can reaccess a previous city.
+var pastSearch = function(pastSearch) {
+    pastSearchEl = document.createElement('button');
+    pastSearchEl.textContent = pastSearch;
+    pastSearchEl.classList = 'd-flex w-100 btn-light border p-2';
+    pastSearchEl.setAttribute('data-city', pastSearch);
+    pastSearchEl.setAttribute('type', 'submit');
+    pastSearchButtonEl.prepend(pastSearchEl);
+}
+
+// This function gets the data for a saved city in
+// the collection of cities that are pastSearch elements
+// in the above pastSearch function.
+var pastSearchHandler = function(event) {
+    var city = event.target.getAttribute('data-city');
+    if (city) {
+        getCityWeather(city);
+        get5Day(city);
+    }
+}
+
+// This function saves every search to local storage.
+var saveSearch = function() {
+    localStorage.setItem('cities', JSON.stringify(cities));
+}
+
+// This function handles the input from the search bar
+// and calls the necessary functions if the input is
+// a valid city.
+var formSubmitHandler = function(event) {
+    event.preventDefault();
+    var city = cityInputEl.value.trim();
+    if (city) {
+        getCityWeather(city);
+        get5Day(city);
+        cities.unshift({city});
+        cityInputEl.value = '';
+    } else {
+        alert('Enter a city into the search field.');
+    }
+    saveSearch();
+    pastSearch(city);
+}
+
+cityFormEl.addEventListener('submit', formSubmitHandler);
+pastSearchButtonEl.addEventListener('click', pastSearchHandler);
