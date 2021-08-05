@@ -156,13 +156,17 @@ var get5Day = function(city) {
 var display5Day = function(weather) {
     forecastContainerEl.textContent = '';
     forecastTitle.textContent = '5 Day Forecast:';
-
+    
+    var currentHour = moment().hour();
+    hoursLeftFromThree = 39 - currentHour;
+    console.log(currentHour)
     var forecast = weather.list;
    
-    for (let i = 0; i < forecast.length/8; i = i + 1) {
-        var dailyForecast = forecast[i*8];
-        console.log(forecast.length)
+    for (let i = 5; i < forecast.length; i = i + 8) {
+        var dailyForecast = forecast[i];
+
         console.log(forecast[i])
+        console.log(i)
         var forecastEl = document.createElement('div');
         forecastEl.classList = 'card bg-primary text-light m-2';
         
