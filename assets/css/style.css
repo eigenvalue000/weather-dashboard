@@ -7,7 +7,14 @@
     border: none;
 }
 .card-body{
-    flex:auto
+    flex:auto;
+    background-color: green;
+    border: solid 1px;
+}
+
+.card-header {
+    background-color: green;
+    border: solid 1px;
 }
 
 span.severe{
