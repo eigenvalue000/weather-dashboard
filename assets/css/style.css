@@ -12,6 +12,9 @@
     border: solid 1px;
 }
 
+.btn.btn-primary {
+    background-color: green;
+}
 .card-header {
     background-color: green;
     border: solid 1px;
