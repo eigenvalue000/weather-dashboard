@@ -151,8 +151,7 @@ var get5Day = function(city) {
 // This function displays the 5 day weather forecast as 5 cards by taking as 
 // an input the weather forecast data from the get5day() function
 // and uses a for loop to create 5 cards and append the various weather
-// forecast items to each card. The forecast uses the 3:00PM time for each
-// card.
+// forecast items to each card. 
 var display5Day = function(weather) {
     forecastContainerEl.textContent = '';
     forecastTitle.textContent = '5 Day Forecast:';
@@ -161,7 +160,7 @@ var display5Day = function(weather) {
    
     for (let i = 5; i < forecast.length; i = i + 8) {
         var dailyForecast = forecast[i];
-
+        console.log(forecast[i])
         var forecastEl = document.createElement('div');
         forecastEl.classList = 'card bg-primary text-light m-2';
         
